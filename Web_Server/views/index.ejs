@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 300px;
+      margin: auto;
+    }
+    label {
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 5px;
+      display: block;
+      text-align: left;
+    }
+    select, input[type="text"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+    }
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    input[type="submit"]:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    h3 {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h3>Space/s available: <%= spacesAvailable %></h3>
+  <form action="/send-email" method="post">
+    <label for="spot">Select Spot:</label>
+    <select id="spot" name="spot" required>
+      <% spots.forEach(spot => { %>
+        <% if (!spot.occupied) { %>
+          <option value="<%= spot['spot number'] %>">Spot <%= spot['spot number'] %></option>
+        <% } %>
+      <% }) %>
+    </select>
+    
+    <label for="fname">First Name:</label>
+    <input type="text" id="fname" name="fname" required>
+    <label for="lname">Last Name:</label>
+    <input type="text" id="lname" name="lname" required>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required>
+    <label for="plate">License Plate:</label>
+    <input type="text" id="plate" name="plate" required>
+    <input type="submit" value="Submit" <%= spacesAvailable <= 0 ? 'disabled' : '' %>>
+  </form>
+</body>
+</html>

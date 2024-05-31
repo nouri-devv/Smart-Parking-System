@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    font-family: Arial, sans-serif; /* Sets the font for the body */
+    background-color: #f4f4f9; /* Light grey background for the whole page */
+    padding: 20px; /* Adds padding around the content of the page */
+  }
+
+  form {
+    background-color: #ffffff; /* White background for the form */
+    padding: 20px; /* Adds padding inside the form */
+    border-radius: 8px; /* Rounded corners for the form */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Subtle shadow around the form */
+    max-width: 300px; /* Maximum width of the form */
+    margin: auto; /* Centers the form horizontally */
+  }
+
+  label {
+    font-weight: bold; /* Makes the font of the labels bold */
+    color: #333333; /* Dark grey color for the text */
+    margin-bottom: 5px; /* Space below each label */
+    display: block; /* Makes labels take up their own line */
+  }
+
+  input[type="text"] {
+    width: calc(100% - 22px); /* Full width taking into account padding and border */
+    padding: 10px; /* Padding inside the text boxes */
+    margin-bottom: 10px; /* Space below each text box */
+    border: 1px solid #cccccc; /* Light grey border around the text boxes */
+    border-radius: 4px; /* Rounded corners for the text boxes */
+  }
+
+  input[type="submit"] {
+    background-color: #4CAF50; /* Green background for the submit button */
+    color: white; /* White text color */
+    border: none; /* No border */
+    padding: 10px 20px; /* Padding inside the button */
+    text-align: center; /* Centered text inside the button */
+    text-decoration: none; /* No underline */
+    display: inline-block; /* Allows setting width and height */
+    font-size: 16px; /* Larger font size for the button */
+    margin: 4px 2px; /* Margin around the button */
+    cursor: pointer; /* Cursor appears as a pointer when hovered */
+    border-radius: 4px; /* Rounded corners for the button */
+  }
+
+  h3 {
+    text-align: center; /* Center the heading text */
+    color: #333333; /* Dark grey color for the heading */
+  }
+</style>
+</head>
+<body>
+
+<h3>Upon arrival at the site, please enter the details below to open the gate.</h3>
+
+<form action="/verify-code" method="post">
+  <label for="email">Email:</label>
+  <input type="text" id="email" name="email" required>
+  <label for="code">Verification Code:</label>
+  <input type="text" id="code" name="code" required>
+  <input type="submit" value="Verify">
+</form>
+
+</body>
+</html>
