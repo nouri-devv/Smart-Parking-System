@@ -1,14 +1,32 @@
 [
   {
     "spot number": "1",
-    "occupied": false
+    "occupied": false,
+    "last valid reading": 100,
+    "historical data": [
+      100,
+      98,
+      102
+    ]
   },
   {
     "spot number": "2",
-    "occupied": false
+    "occupied": false,
+    "last valid reading": 150,
+    "historical data": [
+      150,
+      148,
+      152
+    ]
   },
   {
     "spot number": "3",
-    "occupied": false
+    "occupied": false,
+    "last valid reading": 120,
+    "historical data": [
+      120,
+      118,
+      122
+    ]
   }
 ]
