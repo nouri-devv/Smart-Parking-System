@@ -102,4 +102,15 @@ const markSpotAsFree = (spotNumber) => {
   });
 };
 
-module.exports = { createExpiringObject, getObject, deleteObject };
+// Data integrity check function
+const checkDataIntegrity = (data) => {
+  const checksum = data.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return checksum;
+};
+
+// Validate data with checksum
+const validateData = (data, expectedChecksum) => {
+  return checkDataIntegrity(data) === expectedChecksum;
+};
+
+module.exports = { createExpiringObject, getObject, deleteObject, checkDataIntegrity, validateData };

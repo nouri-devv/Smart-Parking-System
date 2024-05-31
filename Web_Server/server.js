@@ -101,40 +101,6 @@ app.get('/available-spots', (req, res) => {
     });
 });
 
-// // Route to handle marking a spot as taken
-// app.post('/spot-taken', (req, res) => {
-//     const { spotNumber, occupied } = req.body; // Get spotNumber and occupied from request body
-  
-//     // Read the spots.json file
-//     fs.readFile('spots.json', 'utf8', (err, data) => {
-//         if (err) {
-//             console.error(err);
-//             res.status(500).send('Error reading file');
-//             return;
-//         }
-
-//         let spots = JSON.parse(data);
-//         const spot = spots.find(spot => spot["spot number"] == spotNumber);
-
-//         if (spot) {
-//             spot.occupied = occupied; // Set the occupied status based on the received value
-        
-//             // Write the updated spots data back to spots.json
-//             fs.writeFile('spots.json', JSON.stringify(spots, null, 2), (err) => {
-//                 if (err) {
-//                     console.error(err);
-//                     res.status(500).send('Error updating file');
-//                     return;
-//                 }
-//                 res.send('Spot updated successfully');
-//             });
-//         } else {
-//             res.status(404).send('Spot not found');
-//         }
-//     });
-// });
-
-// Route to handle marking a spot as free (you can remove this route if you're using the same route for both)
 app.post('/spot-free', (req, res) => {
     const { spotNumber, occupied } = req.body; // Get spotNumber and occupied from request body
   
@@ -166,6 +132,33 @@ app.post('/spot-free', (req, res) => {
         }
     });
 });
+
+// Network connectivity retry mechanism
+const makeRequestWithRetry = (options, attempts, delay, callback) => {
+    const attemptRequest = (remainingAttempts) => {
+        const req = http.request(options, (res) => {
+            if (res.statusCode === 200) {
+                callback(null, res);
+            } else {
+                if (remainingAttempts > 0) {
+                    setTimeout(() => attemptRequest(remainingAttempts - 1), delay);
+                } else {
+                    callback(new Error(`Failed after ${attempts} attempts`));
+                }
+            }
+        });
+        req.on('error', (err) => {
+            if (remainingAttempts > 0) {
+                setTimeout(() => attemptRequest(remainingAttempts - 1), delay);
+            } else {
+                callback(new Error(`Failed after ${attempts} attempts`));
+            }
+        });
+        req.end();
+    };
+
+    attemptRequest(attempts);
+};
 
 // Start the server on the specified port
 app.listen(port, () => {
