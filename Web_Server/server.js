@@ -88,6 +88,19 @@ const markSpotAsTaken = (spotNumber, callback) => {
     });
 };
 
+app.post('/verify-email', (req, res) => {
+    const { email, code } = req.body; // Extract email and code from request body
+
+    const storedCodeObject = getObject(email); // Retrieve the stored code using the email
+
+    if (storedCodeObject && storedCodeObject.value == code) {
+        res.send("Gates are opening");
+    } else {
+        res.send("Incorrect code. Please try again.");
+    }
+});
+
+
 app.get('/available-spots', (req, res) => {
     fs.readFile('spots.json', 'utf8', (err, data) => {
         if (err) {
