@@ -5,7 +5,7 @@
 // WiFi and server credentials
 const char* ssid = "MOSTAFA"; // WiFi SSID
 const char* password = "0987654321"; // WiFi password
-const char* serverAddress = "192.168.137.1"; // Server IP address
+const char* serverAddress = "192.168.137.106"; // Server IP address
 int port = 5000; // Server port
 
 // Pin definitions for spot 1
