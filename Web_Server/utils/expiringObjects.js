@@ -30,22 +30,20 @@ const createExpiringObject = (email, code, duration, spotNumber) => {
   }, duration);
 };
 
-// Retrieve the code associated with an email if it has not expired
+// Retrieve the stored object associated with an email if it has not expired
 const getObject = (email) => {
   const obj = expiringObjects[email];
   if (obj && obj.expireTime > Date.now()) {
-    return obj.code;
+    return obj;
   } else {
     return null;
   }
 };
 
 // Mark an object as used and delete it
-const deleteObject = (email) => {
+const markCodeAsUsed = (email) => {
   if (expiringObjects[email]) {
     expiringObjects[email].used = true;
-    saveObjects();
-    delete expiringObjects[email];
     saveObjects();
   }
 };
@@ -113,4 +111,4 @@ const validateData = (data, expectedChecksum) => {
   return checkDataIntegrity(data) === expectedChecksum;
 };
 
-module.exports = { createExpiringObject, getObject, deleteObject, checkDataIntegrity, validateData };
+module.exports = { createExpiringObject, getObject, markCodeAsUsed, checkDataIntegrity, validateData };

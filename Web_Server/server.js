@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
-const { createExpiringObject, getObject, deleteObject } = require('./utils/expiringObjects');
+const { createExpiringObject, getObject, markCodeAsUsed, checkDataIntegrity, validateData } = require('./utils/expiringObjects');
 
 const app = express();
 const port = 5000;
@@ -39,7 +39,7 @@ app.post('/send-email', (req, res) => {
         service: 'gmail',
         auth: {
             user: 'nouri.mst0602@gmail.com',
-            pass: 'xhyj vbwc ortn zmrt'
+            pass: 'pkmm mczb ujgh skrh'
         }
     });
 
@@ -56,7 +56,7 @@ app.post('/send-email', (req, res) => {
             res.status(500).send('Error sending email');
         } else {
             console.log('Email sent: ' + info.response);
-            createExpiringObject(email, code, 60000, spot); // Pass spot number to createExpiringObject
+            createExpiringObject(email, code, 3600000, spot); // Pass spot number to createExpiringObject with 1-hour expiry
             markSpotAsTaken(spot, () => {
                 res.render('verify'); // Render the verification page
             });
@@ -133,34 +133,23 @@ app.post('/spot-free', (req, res) => {
     });
 });
 
-// Network connectivity retry mechanism
-const makeRequestWithRetry = (options, attempts, delay, callback) => {
-    const attemptRequest = (remainingAttempts) => {
-        const req = http.request(options, (res) => {
-            if (res.statusCode === 200) {
-                callback(null, res);
-            } else {
-                if (remainingAttempts > 0) {
-                    setTimeout(() => attemptRequest(remainingAttempts - 1), delay);
-                } else {
-                    callback(new Error(`Failed after ${attempts} attempts`));
-                }
-            }
-        });
-        req.on('error', (err) => {
-            if (remainingAttempts > 0) {
-                setTimeout(() => attemptRequest(remainingAttempts - 1), delay);
-            } else {
-                callback(new Error(`Failed after ${attempts} attempts`));
-            }
-        });
-        req.end();
-    };
+// Verify code endpoint
+app.post('/verify-code', (req, res) => {
+    const { email, code } = req.body; // Extract email and code from request body
 
-    attemptRequest(attempts);
-};
+    console.log(`Received verification attempt: email=${email}, code=${code}`); // Debug logging
+
+    const storedCodeObject = getObject(email); // Retrieve the stored code using the email
+
+    if (storedCodeObject && storedCodeObject.code == code) {
+        markCodeAsUsed(email); // Mark code as used
+        res.send("Gates are opening");
+    } else {
+        res.send("Incorrect code. Please try again.");
+    }
+});
 
 // Start the server on the specified port
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http://192.168.137.52:${port}`);
 });
